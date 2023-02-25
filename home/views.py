@@ -8,7 +8,7 @@ from .models import Slider,Product
 def index(request):
     slider = Slider.objects.all()
     
-    product = Product.objects.all()
+    product = Product.objects.all().order_by('-date_added')[:8]
     context ={
         'slider': slider,
         'product': product
@@ -16,8 +16,16 @@ def index(request):
     return render(request,'home/index.html',context)
 
 
-# def product(request):
-#     product = Product.objects.all()
-#     return HttpResponse(product)
+def single_product_details(request,id):
+    single_product = Product.objects.get(id=id)
+    context={
+        'single_product':single_product
+    }
+    return render(request,'product/single_product.html',context)
+
+def product(request):
+    product = Product.objects.all()
+    return HttpResponse(product)
+
 
 
