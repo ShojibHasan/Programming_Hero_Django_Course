@@ -29,3 +29,28 @@ def product(request):
 
 
 
+def search(request):
+    get_method = request.GET.copy()
+    keywords = get_method.get('keywords') or None
+    category = get_method.get('category') or None
+    product = Product.objects.all()
+    
+    if keywords:
+        keyword = get_method['keywords']
+        product_list = product.filter(description__icontains=keyword)
+        
+    if category:
+        category = get_method['category']
+        product_list = product.filter(category__iexact=category)
+        
+    print("product list: ",product_list)
+    
+    # if 'name' in get_method:
+    #     product = get_method['name']
+    #     product_list = product.filter(name__icontains=keyword)
+    
+    context = {
+        'product_list':product_list
+    }
+    
+    return render(request,'search/search_result.html',context)
